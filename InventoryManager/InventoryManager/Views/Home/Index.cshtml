@@ -1,0 +1,92 @@
+﻿@model IEnumerable<InventoryManager.Models.Entities.Product>
+@using InventoryManager.Models.Entities
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="row">
+    <div class="container">   
+
+        <div class="col-md-8">            
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Producto</th>
+                        <th>Tipo</th>
+                        <th>Stock</th>
+                        <th>Precio</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaBody">
+                    @if (Model.Count() > 0)
+                    {
+                        foreach (Product p in Model)
+                        {
+                            <tr>
+                                <td>@p.ProductID</td>
+                                <td>@p.Name</td>
+                                <td>@p.Type</td>
+                                <td>@p.InStock</td>
+                                <td>@p.Price</td>
+                                <td>
+                                    @Html.ActionLink("Edit", "UpdateProduct", new { productid = @p.ProductID }, new { @class = "btn btn-primary btn-sm" })
+                                    <button class="btn btn-danger btn-sm borrarProductoBtn" data-pid="@p.ProductID" data-faction="@Url.Action("DeleteProduct")">Delete</button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr id="noData">
+                            <td colspan="6">No data found</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <button id="agregarProductoBtn" class="btn btn-primary">Agregar nuevo producto</button>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="container">
+        <div class="col-md-6">
+            <div id="agregarProductoForm" class="panel panel-primary" style="display:none;">
+                <div class="panel-heading">
+                    <h5>Agrega uno nuevo</h5>
+                </div>
+                <div class="panel-body">
+                    <form role="form" id="ajaxform" action="@Url.Action("AddProduct")">
+                        <input id="ID" type="hidden" name="ProductID" value="0" />
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Nombre</label>
+                            <input id="fname" type="text" class="form-control col-md-12" name="Name" />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Tipo</label>
+                            <input id="ftype" type="text" class="form-control col-md-12" name="Type" />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Precio</label>
+                            <input id="fprice" type="text" class="form-control col-md-12" name="Price" />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Cantidad en stock</label>
+                            <input id="fstock" type="text" class="form-control col-md-12" name="InStock" />
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Agregar" class="btn btn-danger btn-block col-md-offset-4" />
+                        </div>
+                    </form>
+                </div>
+            </div>            
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript" src="@Url.Content("~/Scripts/index.js")"></script>
+}
